@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html ng-App="KRRclass" lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Music Galery</title>
+
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+	<link href="./css/css-custom.css" rel="stylesheet">
+
+	<style>
+
+ #map {
+        height: 400px;  /* The height is 400 pixels */
+        width: 50%;  /* The width is the width of the web page */
+       }
+
+
+		table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+  background-color: #f58723;
+  color: white;
+}
+	</style>
+
+
+  </head>
+
+  <body  ng-controller="MainCtrl">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-acl mb-5">
+	  <a class="navbar-brand" href="#">
+	      <img src="image/nota.png" height="50" alt="">
+		  Music Galery
+	    </a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mb-5">
+		 
+		 
+		 <div class="container mt-5 mb-5">
+		   <div class="row">
+		     <div class="col-8">
+
+		     	<!--h1>Input the wine preferences</h1> -->
+				
+			
+				
+					<div id="main">
+					<h2>Lojas</h2><button class="addMore" title="Selecione a loja que deseja visitar.">i</button></div>
+					<select id="location">
+
+					  	   </optgroup>
+					  		<optgroup label="Lojas">
+								<option value="Pierre Instrumentos Musicais">Pierre Instrumentos Musicais</option>
+								<option value="AllRock TShirts">AllRock TShirts</option>
+								<option value="Rock Planet">Rock Planet</option>
+								<option value="Jarme">Jarme</option>
+					  </optgroup>
+					  
+					</select>
+
+					<br></br>
+					
+					<div id="main">
+					 <h2>Tipo de Produto</h2><button class="addMore" title="Selectione o tipo de produto que deseja comprar.">i</button></div>
+					<select id="pricecategory">1
+						</optgroup>
+					  		<optgroup label="Tipo produto">
+								<option value="MUSICAL_EQUIPMENT">MusicalEquipment</option>
+								<option value="CLOTHING">Clothing</option>
+								<option value="MUSICAL_MEDIA">MusicalMedia</option>
+					  </optgroup>
+						
+
+					</select>
+
+
+
+				<div align="center">
+                      <br>
+                        <button class="btn btn-outline-secondary" ng-click="botaoloja()" type="button">Pesquisar loja</button>
+                   <br>
+                   <br>
+                          <button class="btn btn-outline-secondary" ng-click="botaoproduto()" type="button">Pesquisar tipo produto</button>
+                         
+                    </div>
+
+
+				<div id="main">
+
+						
+
+				<img id="mapimage" src="image/map.png" alt="image">
+
+
+    		
+  				
+		   	 </div>
+		 </div>
+	 	</div> <!-- end container  -->
+	   
+    </div>
+
+<div align="center">
+    <p ><h1>{{nomeloja}}</h1></p>
+
+		    
+			<div class="col-8 align-self-center" style ="height:500px;overflow:auto;">
+			 
+			   <table id="produtos">
+				   	<tr>
+				   		<th>Nome</th>
+				   		<th>Marca</th>
+				   		<th>Preço</th>
+				   		<th>Tipo</th>
+				   		<th>Vendedor</th>
+				   	</tr>
+				   </table>
+                    
+			</div>
+</div>
+<!--
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCGLzhK-m3Zq1EWCBkEZynP0cQ9oQb5uo&callback=initMap">
+    </script>
+
+
+
+-->
+
+
+    <!-- Footer -->
+
+    <!-- JavaScript libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/angular.min.js"></script>
+	
+	<script src="js/Chart.min.js"></script>
+	<script src="js/angular-chart.min.js"></script>
+	
+	<script src="main.js"></script>
+
+  </body>
+
+</html>
