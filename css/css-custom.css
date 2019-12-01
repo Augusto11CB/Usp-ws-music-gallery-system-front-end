@@ -24,12 +24,22 @@
 	background-color: #6A7FA0;
 }
 
+.center{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 .a-acl {
 	color: #3c3c3c!important;
 }
 
 .my-card:hover {
 	border-color: #f58723;
+}
+
+.show-cart li {
+  display: flex;
 }
 
 #box {
@@ -68,8 +78,8 @@ h2 {
 }
 
 #main {
-  width: 200px;
-  display:inline-block;
+  	width: 175px;
+  	display:inline-block;
 }
 
 #tasteprofiles{
