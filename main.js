@@ -1,6 +1,6 @@
 angular.module('KRRclass', ['chart.js']).controller('MainCtrl', ['$scope', '$http', mainCtrl]);
 
-function mainCtrl($scope, $http, ChartJsProvider){
+function mainCtrl($scope, $http, ChartJsProvider) {
 
 	$scope.myendpoint = "http://localhost:7200/repositories/hiper_mega_final_winez?query=";
 	$scope.nomeloja = "";
@@ -22,13 +22,14 @@ function mainCtrl($scope, $http, ChartJsProvider){
 			headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
 			url: "https://ws-music-gallery-system.herokuapp.com/product/get-products/store/" + encodeURIComponent($scope.nomeloja.replace(" ", "")),
 
-    } )
-    .success(function(data, status ) {
-    	var lojatable = document.getElementById("produtos");
+		})
+			.success(function (data, status) {
+				var lojatable = document.getElementById("produtos");
+				var cpf = document.getElementById("cpfUsuario");
 
-    	$("#produtos").find("tr:not(:first)").remove();
-        console.log(data);
-        $scope.resultz = eval(data);
+				$("#produtos").find("tr:not(:first)").remove();
+				console.log(data);
+				$scope.resultz = eval(data);
 
 
 				if (!lojatable) return;
@@ -78,13 +79,32 @@ function mainCtrl($scope, $http, ChartJsProvider){
 
 
 						$scope.lat_lng_query = encodeURIComponent($scope.lat_lng_query)
-						$http({
-							method: "POST",
-							url: "https://ws-music-gallery-system.herokuapp.com/purchase/make-purchase?cpf=" + encodeURIComponent($scope.cpfUsuario.replace(" ", "")),
-							headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-						}).success(function (data, status) {
-							
-						})
+
+						[
+							{
+							  "name": "UprightPiano",
+							  "typeProductAndBusiness": "MUSICAL_EQUIPMENT",
+							  "uri": "http://www.musicgallery/UprightPiano"
+							}
+						  ]
+						if(cpf.value != "" ){
+							$http({
+								method: "POST",
+								url: "https://ws-music-gallery-system.herokuapp.com/purchase/make-purchase?age=18&cpf=" + cpf.value, //+ encodeURIComponent($scope.cpfUsuario.replace(" ", "")),
+								headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+								data: [
+									{
+									name: rowSelected.cells[0].innerHTML,
+									typeProductAndBusiness: rowSelected.cells[3].innerHTML,
+									uri: rowSelected.cells[5].innerHTML
+									}
+								]
+							}).success(function (data, status) {
+								alert("Compra realizada com sucesso. Retirar na loja")
+							})
+						}else {
+							alert("digite o cpf para realizar a compra")
+						}
 					}
 				}
 				console.log(cells)
@@ -168,31 +188,20 @@ function mainCtrl($scope, $http, ChartJsProvider){
 						rowSelected.className += " selected";
 
 
-						// $scope.lat_lng_query = encodeURIComponent($scope.lat_lng_query)
-						// $http({
-						// 	method: "POST",
-						// 	url: $scope.myendpoint + $scope.lat_lng_query,
-						// 	headers: { 'Accept': 'application/sparql-results+json', 'Content-Type': 'application/sparql-results+json' }
-						// }).success(function (data, status) {
-
-
-						// 	$scope.lat_resultz = eval(data);
-						// 	$scope.lat = 0;
-						// 	$scope.long = 0;
-						// 	if ($scope.lat_resultz["results"]["bindings"].length == 0) {
-						// 		alert('no location available')
-						// 	}
-
-						// 	else {
-						// 		console.log($scope.lat_resultz["results"]["bindings"][0]["grape"]["value"]);
-						// 		var map = new google.maps.Map(document.getElementById('map'), {
-						// 			center: { lat: Number($scope.lat_resultz["results"]["bindings"][0]["lat"]["value"]), lng: Number($scope.lat_resultz["results"]["bindings"][0]["long"]["value"]) },
-						// 			zoom: 6
-						// 		});
-						// 		var grape_image = document.getElementById("grapeimage");
-						// 		grape_image.src = $scope.lat_resultz["results"]["bindings"][0]["image"]["value"];
-						// 	}
-						// })
+						$http({
+							method: "POST",
+							url: "https://ws-music-gallery-system.herokuapp.com/purchase/make-purchase?cpf=22222222222&age=1", //+ encodeURIComponent($scope.cpfUsuario.replace(" ", "")),
+							headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+							data: [
+								{
+								name: rowSelected.cells[0].innerHTML,
+								typeProductAndBusiness: rowSelected.cells[3].innerHTML,
+								uri: rowSelected.cells[5].innerHTML
+								}
+							]
+						}).success(function (data, status) {
+							alert("Compra realizada com sucesso. Retirar na loja")
+						})
 					}
 				}
 				//     
@@ -204,17 +213,10 @@ function mainCtrl($scope, $http, ChartJsProvider){
 	}
 
 
-
-
-
-
-
-
-
-	var shoppingCart = (function() {
-	  // =============================
-	  // Private methods and propeties
-	  // =============================
+	var shoppingCart = (function () {
+		// =============================
+		// Private methods and propeties
+		// =============================
 		cart = [];
 
 		// Constructor
@@ -238,37 +240,37 @@ function mainCtrl($scope, $http, ChartJsProvider){
 		}
 
 		// =============================
-	  	// Public methods and propeties
-	  	// =============================
-	  	var obj = {};
-	  	// Add to cart
-	  	obj.addItemToCart = function(name, price, count) {
-	    	for(var item in cart) {
-		      	if(cart[item].name === name) {
-			        cart[item].count ++;
-			        saveCart();
-			        return;
-		      	}
-	    	}
-		    var item = new Item(name, price, count);
-		    cart.push(item);
-		    saveCart();
-	  	}
-	  	// Set count from item
-		obj.setCountForItem = function(name, count) {
-			for(var i in cart) {
+		// Public methods and propeties
+		// =============================
+		var obj = {};
+		// Add to cart
+		obj.addItemToCart = function (name, price, count) {
+			for (var item in cart) {
+				if (cart[item].name === name) {
+					cart[item].count++;
+					saveCart();
+					return;
+				}
+			}
+			var item = new Item(name, price, count);
+			cart.push(item);
+			saveCart();
+		}
+		// Set count from item
+		obj.setCountForItem = function (name, count) {
+			for (var i in cart) {
 				if (cart[i].name === name) {
-			        cart[i].count = count;
-			        break;
-		      	}
-		    }
+					cart[i].count = count;
+					break;
+				}
+			}
 		};
 		// Remove item from cart
-		obj.removeItemFromCart = function(name) {
-			for(var item in cart) {
-				if(cart[item].name === name) {
-					cart[item].count --;
-					if(cart[item].count === 0) {
+		obj.removeItemFromCart = function (name) {
+			for (var item in cart) {
+				if (cart[item].name === name) {
+					cart[item].count--;
+					if (cart[item].count === 0) {
 						cart.splice(item, 1);
 					}
 					break;
@@ -277,9 +279,9 @@ function mainCtrl($scope, $http, ChartJsProvider){
 			saveCart();
 		}
 		// Remove all items from cart
-		obj.removeItemFromCartAll = function(name) {
-			for(var item in cart) {
-				if(cart[item].name === name) {
+		obj.removeItemFromCartAll = function (name) {
+			for (var item in cart) {
+				if (cart[item].name === name) {
 					cart.splice(item, 1);
 					break;
 				}
@@ -287,38 +289,38 @@ function mainCtrl($scope, $http, ChartJsProvider){
 			saveCart();
 		}
 		// Clear cart
-		obj.clearCart = function() {
+		obj.clearCart = function () {
 			cart = [];
 			saveCart();
 		}
 		// Count cart 
-		obj.totalCount = function() {
+		obj.totalCount = function () {
 			var totalCount = 0;
-				for(var item in cart) {
-					totalCount += cart[item].count;
-				}
+			for (var item in cart) {
+				totalCount += cart[item].count;
+			}
 			return totalCount;
 		}
 		// Total cart
-		obj.totalCart = function() {
+		obj.totalCart = function () {
 			var totalCart = 0;
-			for(var item in cart) {
+			for (var item in cart) {
 				totalCart += cart[item].price * cart[item].count;
 			}
 			return Number(totalCart.toFixed(2));
 		}
 		// List cart
-		obj.listCart = function() {
+		obj.listCart = function () {
 			var cartCopy = [];
-				for(i in cart) {
-					item = cart[i];
-					itemCopy = {};
-					for(p in item) {
-						itemCopy[p] = item[p];
-					}
-					itemCopy.total = Number(item.price * item.count).toFixed(2);
-					cartCopy.push(itemCopy)
+			for (i in cart) {
+				item = cart[i];
+				itemCopy = {};
+				for (p in item) {
+					itemCopy[p] = item[p];
 				}
+				itemCopy.total = Number(item.price * item.count).toFixed(2);
+				cartCopy.push(itemCopy)
+			}
 			return cartCopy;
 		}
 
@@ -339,17 +341,17 @@ function mainCtrl($scope, $http, ChartJsProvider){
 	function displayCart() {
 		var cartArray = shoppingCart.listCart();
 		var output = "";
-		for(var i in cartArray) {
+		for (var i in cartArray) {
 			output += "<tr>"
-				+ "<td>" + cartArray[i].name + "</td>" 
+				+ "<td>" + cartArray[i].name + "</td>"
 				+ "<td>(" + cartArray[i].price + ")</td>"
 				+ "<td><div class='input-group'><button class='minus-item input-group-addon btn btn-primary' data-name=" + cartArray[i].name + ">-</button>"
 				+ "<input type='number' class='item-count form-control' data-name='" + cartArray[i].name + "' value='" + cartArray[i].count + "'>"
 				+ "<button class='plus-item btn btn-primary input-group-addon' data-name=" + cartArray[i].name + ">+</button></div></td>"
 				+ "<td><button class='delete-item btn btn-danger' data-name=" + cartArray[i].name + ">X</button></td>"
-				+ " = " 
-				+ "<td>" + cartArray[i].total + "</td>" 
-				+  "</tr>";
+				+ " = "
+				+ "<td>" + cartArray[i].total + "</td>"
+				+ "</tr>";
 		}
 		$('.show-cart').html(output);
 		$('.total-cart').html(shoppingCart.totalCart());
@@ -357,20 +359,20 @@ function mainCtrl($scope, $http, ChartJsProvider){
 	}
 
 
-	$('.show-cart').on("click", ".delete-item", function(event) {
+	$('.show-cart').on("click", ".delete-item", function (event) {
 		var name = $(this).data('name')
 		shoppingCart.removeItemFromCartAll(name);
 		displayCart();
 	})
 
-	$('.show-cart').on("click", ".plus-item", function(event) {
+	$('.show-cart').on("click", ".plus-item", function (event) {
 		var name = $(this).data('name')
 		shoppingCart.addItemToCart(name);
 		displayCart();
 	})
 
 	// Item count input
-	$('.show-cart').on("change", ".item-count", function(event) {
+	$('.show-cart').on("change", ".item-count", function (event) {
 		var name = $(this).data('name');
 		var count = Number($(this).val());
 		shoppingCart.setCountForItem(name, count);

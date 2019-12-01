@@ -10,8 +10,9 @@
 
 	<title>Music Galery</title>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link href="./css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link href="./css/bootstrap.min.css" rel="stylesheet">
 	<link href="./css/css-custom.css" rel="stylesheet">
 
 	<style>
@@ -48,31 +49,23 @@
 </head>
 
 <body ng-controller="MainCtrl">
-
 	<!-- Navigation -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-acl mb-5">
-		<a class="navbar-brand" href="#">
-			<img src="image/nota.png" height="50" alt="">
-			Music Galery
-		</a>
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#"><img src="image/nota.png" height="50" alt=""> Music Galery</a>
+			</div>
+			<ul class="nav navbar-nav navbar-right">
+				<button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal"
+					data-target="#cart">Cart(<span class="total-count"></span>)</button>
+				<button class="clear-cart btn btn-danger">Clear Cart</button>
+		</div>
+		</ul>
+		</div>
 	</nav>
 
-  </head>
-  <body  ng-controller="MainCtrl">
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-acl mb-5">
-    	<div class="container-fluid"> 
-    		<div class="navbar-header">
-    			<a class="navbar-brand" href="#"><img src="image/nota.png" height="50" alt=""> Music Galery</a>
-    		</div>
-    		<ul class="nav navbar-nav navbar-right">
-    			<button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal" data-target="#cart">Cart(<span class="total-count"></span>)</button>
-	          	<button class="clear-cart btn btn-danger">Clear Cart</button></div>
-    		</ul>
-    	</div>
-    </nav>
-
-	<div class="modal fade" id="cart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="cart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -94,12 +87,12 @@
 		</div>
 	</div>
 
-    <!-- Main Content -->
+	<!-- Main Content -->
 	<div class="container mb-5">
 		<div class="container mt-5 mb-5">
 			<div class="row">
 				<div class="col">
-				<!--h1>Input the wine preferences</h1> -->
+					<!--h1>Input the wine preferences</h1> -->
 					<div id="main">
 						<h2>Lojas</h2><button class="addMore" title="Selecione a loja que deseja visitar.">i</button>
 					</div>
@@ -117,7 +110,8 @@
 					<br></br>
 
 					<div id="main">
-						<h2>Tipo de Produto</h2><button class="addMore" title="Selectione o tipo de produto que deseja comprar.">i</button>
+						<h2>Tipo de Produto</h2><button class="addMore"
+							title="Selectione o tipo de produto que deseja comprar.">i</button>
 					</div>
 					<select id="pricecategory">1
 						</optgroup>
@@ -129,51 +123,66 @@
 					</select>
 					<div align="center">
 						<br>
-						<button class="btn btn-outline-secondary" ng-click="botaoloja()" type="button">Pesquisar loja</button>
+						<button class="btn btn-outline-secondary" ng-click="botaoloja()" type="button">Pesquisar
+							loja</button>
 						<br>
 						<br>
-						<button class="btn btn-outline-secondary" ng-click="botaoproduto()" type="button">Pesquisar tipo produto</button>
+						<button class="btn btn-outline-secondary" ng-click="botaoproduto()" type="button">Pesquisar tipo
+							produto</button>
 					</div>
 					<img id="mapimage" src="image/map.png" alt="image" class="center">
+
+					CPF: <input id="cpfUsuario" type="text" name="FirstName" value="">
+					<br>
+					<br>
+
 				</div>
 			</div> <!-- end container  -->
 		</div>
 
 		<div align="center">
-		    <p ><h1>{{nomeloja}}</h1></p>
-			<div class="col-8 align-self-center" style ="height:500px;overflow:auto;">
-			 
-			   <table id="produtos" class="display" style="width: 100%">
-			   		<thead>
-				   		<th>Nome</th>
-				   		<th>Marca</th>
-				   		<th>Preço</th>
-				   		<th>Tipo</th>
-				   		<th>Vendedor</th>
-			   		</thead>
-				</table> 
+			<p>
+				<h1>{{nomeloja}}</h1>
+			</p>
+			<div class="col-8 align-self-center" style="height:500px;overflow:auto;">
+
+				<table id="produtos" class="display" style="width: 100%">
+					<thead>
+						<th>Nome</th>
+						<th>Marca</th>
+						<th>Preço</th>
+						<th>Tipo</th>
+						<th>Vendedor</th>
+					</thead>
+				</table>
 			</div>
 		</div>
 	</div>
 
-<!--
+	<!--
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCGLzhK-m3Zq1EWCBkEZynP0cQ9oQb5uo&callback=initMap">
     </script>
 -->
-    <!-- Footer -->
+	<!-- Footer -->
 
-    <!-- JavaScript libraries -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="js/angular.min.js"></script>
-	
+	<!-- JavaScript libraries -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="js/angular.min.js"></script>
+
 	<script src="js/Chart.min.js"></script>
 	<script src="js/angular-chart.min.js"></script>
 
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+
 	<script src="main.js"></script>
 
 </body>
