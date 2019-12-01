@@ -25,6 +25,8 @@ function mainCtrl($scope, $http, ChartJsProvider){
     } )
     .success(function(data, status ) {
     	var lojatable = document.getElementById("produtos");
+
+    	$("#produtos").find("tr:not(:first)").remove();
         console.log(data);
         $scope.resultz = eval(data);
 
@@ -76,7 +78,9 @@ function mainCtrl($scope, $http, ChartJsProvider){
 
     } )
     .success(function(data, status ) {
-    	var lojatable = document.getElementById("produtos"), rIndex;
+    	var lojatable = document.getElementById("produtos");
+
+    	$("#produtos").find("tr:not(:first)").remove();
         console.log(data);
         $scope.resultz = eval(data);
 
