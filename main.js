@@ -289,7 +289,7 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 								// alert("Compra realizada com sucesso. Retirar na loja")
 							})
 						} else {
-							// alert("digite o cpf para realizar a compra")
+							alert("digite o cpf para realizar a compra")
 						}
 					}
 				}
@@ -395,7 +395,7 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 								// alert("Compra realizada com sucesso. Retirar na loja")
 							})
 						} else {
-							// alert("digite o cpf para realizar a compra")
+							alert("digite o cpf para realizar a compra")
 						}
 					}
 				}    
