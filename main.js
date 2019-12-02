@@ -6,128 +6,128 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 	$scope.nomeloja = "";
 
 	var shoppingCart = (function () {
-	// =============================
-	// Private methods and propeties
-	// =============================
-	cart = [];
-
-	// Constructor
-	function Item(name, price, count) {
-		this.name = name;
-		this.price = price;
-		this.count = count;
-	}
-
-	// Save cart
-	function saveCart() {
-		sessionStorage.setItem('shoppingCart', JSON.stringify(cart));
-	}
-
-	// Load cart
-	function loadCart() {
-		cart = JSON.parse(sessionStorage.getItem('shoppingCart'));
-	}
-	if (sessionStorage.getItem("shoppingCart") != null) {
-		loadCart();
-	}
-
-	// =============================
-	// Public methods and propeties
-	// =============================
-	var obj = {};
-	// Add to cart
-	obj.addItemToCart = function (name, price, count) {
-		for (var item in cart) {
-			if (cart[item].name === name) {
-				cart[item].count++;
-				saveCart();
-				return;
-			}
-		}
-		var item = new Item(name, price, count);
-		cart.push(item);
-		saveCart();
-	}
-	// Set count from item
-	obj.setCountForItem = function (name, count) {
-		for (var i in cart) {
-			if (cart[i].name === name) {
-				cart[i].count = count;
-				break;
-			}
-		}
-	};
-	// Remove item from cart
-	obj.removeItemFromCart = function (name) {
-		for (var item in cart) {
-			if (cart[item].name === name) {
-				cart[item].count--;
-				if (cart[item].count === 0) {
-					cart.splice(item, 1);
-				}
-				return;
-			}
-		}
-		saveCart();
-	}
-	// Remove all items from cart
-	obj.removeItemFromCartAll = function (name) {
-		for (var item in cart) {
-			if (cart[item].name === name) {
-				cart.splice(item, 1);
-				break;
-			}
-		}
-		saveCart();
-	}
-	// Clear cart
-	obj.clearCart = function () {
+		// =============================
+		// Private methods and propeties
+		// =============================
 		cart = [];
-		saveCart();
-	}
-	// Count cart 
-	obj.totalCount = function () {
-		var totalCount = 0;
-		for (var item in cart) {
-			totalCount += cart[item].count;
-		}
-		return totalCount;
-	}
-	// Total cart
-	obj.totalCart = function () {
-		var totalCart = 0;
-		for (var item in cart) {
-			totalCart += cart[item].price * cart[item].count;
-		}
-		return Number(totalCart.toFixed(2));
-	}
-	// List cart
-	obj.listCart = function () {
-		var cartCopy = [];
-		for (i in cart) {
-			item = cart[i];
-			itemCopy = {};
-			for (p in item) {
-				itemCopy[p] = item[p];
-			}
-			itemCopy.total = Number(item.price * item.count).toFixed(2);
-			cartCopy.push(itemCopy)
-		}
-		return cartCopy;
-	}
 
-	// cart : Array
-	// Item : Object/Class
-	// addItemToCart : Function
-	// removeItemFromCart : Function
-	// removeItemFromCartAll : Function
-	// clearCart : Function
-	// countCart : Function
-	// totalCart : Function
-	// listCart : Function
-	// saveCart : Function
-	// loadCart : Function
-	return obj;
+		// Constructor
+		function Item(name, price, count) {
+			this.name = name;
+			this.price = price;
+			this.count = count;
+		}
+
+		// Save cart
+		function saveCart() {
+			sessionStorage.setItem('shoppingCart', JSON.stringify(cart));
+		}
+
+		// Load cart
+		function loadCart() {
+			cart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+		}
+		if (sessionStorage.getItem("shoppingCart") != null) {
+			loadCart();
+		}
+
+		// =============================
+		// Public methods and propeties
+		// =============================
+		var obj = {};
+		// Add to cart
+		obj.addItemToCart = function (name, price, count) {
+			for (var item in cart) {
+				if (cart[item].name === name) {
+					cart[item].count++;
+					saveCart();
+					return;
+				}
+			}
+			var item = new Item(name, price, count);
+			cart.push(item);
+			saveCart();
+		}
+		// Set count from item
+		obj.setCountForItem = function (name, count) {
+			for (var i in cart) {
+				if (cart[i].name === name) {
+					cart[i].count = count;
+					break;
+				}
+			}
+		};
+		// Remove item from cart
+		obj.removeItemFromCart = function (name) {
+			for (var item in cart) {
+				if (cart[item].name === name) {
+					cart[item].count--;
+					if (cart[item].count === 0) {
+						cart.splice(item, 1);
+					}
+					return;
+				}
+			}
+			saveCart();
+		}
+		// Remove all items from cart
+		obj.removeItemFromCartAll = function (name) {
+			for (var item in cart) {
+				if (cart[item].name === name) {
+					cart.splice(item, 1);
+					break;
+				}
+			}
+			saveCart();
+		}
+		// Clear cart
+		obj.clearCart = function () {
+			cart = [];
+			saveCart();
+		}
+		// Count cart 
+		obj.totalCount = function () {
+			var totalCount = 0;
+			for (var item in cart) {
+				totalCount += cart[item].count;
+			}
+			return totalCount;
+		}
+		// Total cart
+		obj.totalCart = function () {
+			var totalCart = 0;
+			for (var item in cart) {
+				totalCart += cart[item].price * cart[item].count;
+			}
+			return Number(totalCart.toFixed(2));
+		}
+		// List cart
+		obj.listCart = function () {
+			var cartCopy = [];
+			for (i in cart) {
+				item = cart[i];
+				itemCopy = {};
+				for (p in item) {
+					itemCopy[p] = item[p];
+				}
+				itemCopy.total = Number(item.price * item.count).toFixed(2);
+				cartCopy.push(itemCopy)
+			}
+			return cartCopy;
+		}
+
+		// cart : Array
+		// Item : Object/Class
+		// addItemToCart : Function
+		// removeItemFromCart : Function
+		// removeItemFromCartAll : Function
+		// clearCart : Function
+		// countCart : Function
+		// totalCart : Function
+		// listCart : Function
+		// saveCart : Function
+		// loadCart : Function
+		return obj;
 	})();
 
 	// *****************************************
@@ -135,7 +135,7 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 	// ***************************************** 
 	// Add item
 
-	$('.add-to-cart').click(function(event) {
+	$('.add-to-cart').click(function (event) {
 		event.preventDefault();
 		var name = $(this).data('name');
 		var price = Number($(this).data('price'));
@@ -144,7 +144,7 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 	});
 
 	// Clear items
-	$('.clear-cart').click(function() {
+	$('.clear-cart').click(function () {
 		shoppingCart.clearCart();
 		displayCart();
 	});
@@ -270,7 +270,7 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 
 						$scope.lat_lng_query = encodeURIComponent($scope.lat_lng_query)
 
-						if(cpf.value != "" ){
+						if (cpf.value != "") {
 							shoppingCart.addItemToCart(rowSelected.cells[0].innerHTML, rowSelected.cells[2].innerHTML, 1);
 							displayCart();
 
@@ -280,16 +280,17 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 								headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
 								data: [
 									{
-									name: rowSelected.cells[0].innerHTML,
-									typeProductAndBusiness: rowSelected.cells[3].innerHTML,
-									uri: rowSelected.cells[5].innerHTML
+										name: rowSelected.cells[0].innerHTML,
+										typeProductAndBusiness: rowSelected.cells[3].innerHTML,
+										uri: rowSelected.cells[5].innerHTML
 									}
 								]
 							}).success(function (data, status) {
 								// alert("Compra realizada com sucesso. Retirar na loja")
 							})
 						} else {
-							alert("digite o cpf para realizar a compra")
+							//alert("digite o cpf para realizar a compra")
+							cpfEmpty();
 						}
 					}
 				}
@@ -376,7 +377,7 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 
 						$scope.lat_lng_query = encodeURIComponent($scope.lat_lng_query)
 
-						if(cpf.value != "" ){
+						if (cpf.value != "") {
 							shoppingCart.addItemToCart(rowSelected.cells[0].innerHTML, rowSelected.cells[2].innerHTML, 1);
 							displayCart();
 
@@ -386,9 +387,9 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 								headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
 								data: [
 									{
-									name: rowSelected.cells[0].innerHTML,
-									typeProductAndBusiness: rowSelected.cells[3].innerHTML,
-									uri: rowSelected.cells[5].innerHTML
+										name: rowSelected.cells[0].innerHTML,
+										typeProductAndBusiness: rowSelected.cells[3].innerHTML,
+										uri: rowSelected.cells[5].innerHTML
 									}
 								]
 							}).success(function (data, status) {
@@ -398,11 +399,170 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 							alert("digite o cpf para realizar a compra")
 						}
 					}
-				}    
+				}
 			})
 			.error(function (error) {
 				console.log(error);
 			});
 
+	}
+
+	$scope.buttonRecomendation = function () {
+
+		var loja_drop_down_list = document.getElementById("location");
+		var loja_input = loja_drop_down_list.options[loja_drop_down_list.selectedIndex].value;
+
+		$scope.nomeloja = loja_input;
+
+		var mapimage = document.getElementById("mapimage");
+		mapimage.src = "image/map.png";
+
+		var cpf = document.getElementById("cpfUsuario");
+
+		if (cpf.value == "" || cpf.value.length < 11 || cpf.value.length > 11) {
+			cpfEmpty();
+		} else {
+
+			$http({
+				method: "GET",
+				headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+				url: "https://ws-music-gallery-system.herokuapp.com/recommendation/get-recommended-products?userCPF=" + cpf.value,
+
+			})
+				.success(function (data, status) {
+					var lojatable = document.getElementById("produtos");
+
+					$("#produtos").find("tr:not(:first)").remove();
+					console.log(data);
+					$scope.resultz = eval(data);
+
+
+					if (!lojatable) return;
+
+					// var test = [1,2,3,4,5,6];
+					for (j = 0; j < $scope.resultz.length; j++) {
+						var newRow = lojatable.insertRow(lojatable.rows.length);
+
+						var cell = newRow.insertCell(0);
+						cell.innerHTML = $scope.resultz[j]["name"];
+
+						var cell = newRow.insertCell(1);
+						cell.innerHTML = $scope.resultz[j]["brand"];
+
+						var cell = newRow.insertCell(2);
+						cell.innerHTML = $scope.resultz[j]["price"];
+
+						var cell = newRow.insertCell(3);
+						cell.innerHTML = $scope.resultz[j]["typeProductAndBusiness"];
+
+						var cell = newRow.insertCell(4);
+						cell.innerHTML = $scope.resultz[j]["soldByStore"]["name"];
+
+						var cell = newRow.insertCell(5);
+						cell.innerHTML = $scope.resultz[j]["uri"];
+					}
+
+					var cells = lojatable.getElementsByTagName('td');
+
+					for (var i = 0; i < cells.length; i++) {
+						// Take each cell
+						var cell = cells[i];
+						// do something on onclick event for cell
+						cell.onclick = function () {
+							// Get the row id where the cell exists
+							var rowId = this.parentNode.rowIndex;
+
+							var rowsNotSelected = lojatable.getElementsByTagName('tr');
+							for (var row = 0; row < rowsNotSelected.length; row++) {
+								rowsNotSelected[row].style.backgroundColor = "";
+								rowsNotSelected[row].classList.remove('selected');
+							}
+							var rowSelected = lojatable.getElementsByTagName('tr')[rowId];
+							rowSelected.style.backgroundColor = "yellow";
+							rowSelected.className += " selected";
+
+							$scope.lat_lng_query = encodeURIComponent($scope.lat_lng_query)
+
+							if (cpf.value != "") {
+								shoppingCart.addItemToCart(rowSelected.cells[0].innerHTML, rowSelected.cells[2].innerHTML, 1);
+								displayCart();
+
+								$http({
+									method: "POST",
+									url: "https://ws-music-gallery-system.herokuapp.com/purchase/make-purchase?age=18&cpf=" + cpf.value, //+ encodeURIComponent($scope.cpfUsuario.replace(" ", "")),
+									headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+									data: [
+										{
+											name: rowSelected.cells[0].innerHTML,
+											typeProductAndBusiness: rowSelected.cells[3].innerHTML,
+											uri: rowSelected.cells[5].innerHTML
+										}
+									]
+								}).success(function (data, status) {
+									// alert("Compra realizada com sucesso. Retirar na loja")
+									
+								})
+							} else {
+								//alert("digite o cpf para realizar a compra")
+								cpfEmpty();
+							}
+						}
+					}
+				})
+
+				.error(function (error) {
+					console.log(error);
+				});
+		}
+
+	}
+
+	function cpfEmpty() {
+		swal({
+			title: "Para realizar um pedido de compra um CPF valido deve ser informado.",
+			text: "Seu pedido compra não foi realizada usando o modo One Click",
+			type: "warning",
+			//showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "OK",
+			//cancelButtonText: "I am not sure!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		}
+			// function (isConfirm) {
+
+			// 	swal("Hurray", "Account is not removed!", "error");
+			// 	if (isConfirm) {
+			// 		swal("Account Removed!", "Your account is removed permanently!", "success");
+			// 	}
+			// 	else {
+			// 		swal("Hurray", "Account is not removed!", "error");
+			// 	}
+			//}
+		);
+	}
+
+	function productPurchased() {
+		swal({
+			title: "Pedido de compra realizado com sucesso!!",
+			text: "Vá até a loja para finalizar a compra e retirar seu novo produto!! :D",
+			type: "success",
+			//showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "OK",
+			//cancelButtonText: "I am not sure!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		}//,
+			//  function (isConfirm) {
+
+			//  	if (isConfirm) {
+			//  		swal("Pedido de Compra realizado com sucesso!", "success");
+			//  	}
+			//  	else {
+			//  		swal("Hurray", "Account is not removed!", "error");
+			//  	}
+			//  }
+		);
 	}
 }
