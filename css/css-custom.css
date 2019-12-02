@@ -30,6 +30,10 @@
 	margin-right: auto;
 }
 
+.modal-lg{
+	max-width: 70%;
+}
+
 .a-acl {
 	color: #3c3c3c!important;
 }
