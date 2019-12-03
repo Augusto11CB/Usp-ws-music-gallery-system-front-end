@@ -383,7 +383,7 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 
 							$http({
 								method: "POST",
-								url: "https://ws-music-gallery-system.herokuapp.com/purchase/make-purchase?cpf=22222222222&age=1", //+ encodeURIComponent($scope.cpfUsuario.replace(" ", "")),
+								url: "https://ws-music-gallery-system.herokuapp.com/purchase/make-purchase?age=18&cpf=" + cpf.value, //+ encodeURIComponent($scope.cpfUsuario.replace(" ", "")),
 								headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
 								data: [
 									{
@@ -396,7 +396,7 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 								// alert("Compra realizada com sucesso. Retirar na loja")
 							})
 						} else {
-							alert("digite o cpf para realizar a compra")
+							cpfEmpty();
 						}
 					}
 				}
