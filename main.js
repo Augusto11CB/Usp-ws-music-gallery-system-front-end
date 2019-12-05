@@ -12,10 +12,12 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 		cart = [];
 
 		// Constructor
-		function Item(name, price, count) {
+		function Item(name, price, count, type, uri) {
 			this.name = name;
 			this.price = price;
 			this.count = count;
+			this.type = type;
+			this.uri = uri;
 		}
 
 		// Save cart
@@ -36,7 +38,7 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 		// =============================
 		var obj = {};
 		// Add to cart
-		obj.addItemToCart = function (name, price, count) {
+		obj.addItemToCart = function (name, price, count, type, uri) {
 			for (var item in cart) {
 				if (cart[item].name === name) {
 					cart[item].count++;
@@ -44,7 +46,7 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 					return;
 				}
 			}
-			var item = new Item(name, price, count);
+			var item = new Item(name, price, count, type, uri);
 			cart.push(item);
 			saveCart();
 		}
@@ -139,7 +141,9 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 		event.preventDefault();
 		var name = $(this).data('name');
 		var price = Number($(this).data('price'));
-		shoppingCart.addItemToCart(name, price, 1);
+		var type = $(this).data('type');
+		var uri = $(this).data('uri');
+		shoppingCart.addItemToCart(name, price, 1, type, uri);
 		displayCart();
 	});
 
@@ -149,6 +153,35 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 		displayCart();
 	});
 
+
+	$(".order").click(function () {
+		var cpf = document.getElementById("cpfUsuario");
+		if (cpf.value != "") {
+			var cart = shoppingCart.listCart();
+			var post_cart = []
+			console.log(cart);
+
+			for (var i = 0; i < cart.length; i++){
+				post_cart[i] = {
+					name: cart[i]["name"].innerHTML,
+					typeProductAndBusiness: cart[i]["type"].innerHTML,
+					uri: cart[i]["uri"].innerHTML
+				}
+			}
+
+			$http({
+				method: "POST",
+				url: "https://ws-music-gallery-system.herokuapp.com/purchase/make-purchase?age=18&cpf=" + cpf.value, //+ encodeURIComponent($scope.cpfUsuario.replace(" ", "")),
+				headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+				data: post_cart		
+			}).success(function (data, status) {
+				// alert("Compra realizada com sucesso. Retirar na loja")
+			}) 
+		}
+		else {
+			cpfEmpty();
+		}
+	});	
 
 	function displayCart() {
 		var cartArray = shoppingCart.listCart();
@@ -197,6 +230,8 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 	});
 
 	displayCart();
+
+
 
 	$scope.botaoloja = function () {
 
@@ -270,32 +305,12 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 
 						$scope.lat_lng_query = encodeURIComponent($scope.lat_lng_query)
 
-						if (cpf.value != "") {
-							shoppingCart.addItemToCart(rowSelected.cells[0].innerHTML, rowSelected.cells[2].innerHTML, 1);
-							displayCart();
-
-							$http({
-								method: "POST",
-								url: "https://ws-music-gallery-system.herokuapp.com/purchase/make-purchase?age=18&cpf=" + cpf.value, //+ encodeURIComponent($scope.cpfUsuario.replace(" ", "")),
-								headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-								data: [
-									{
-										name: rowSelected.cells[0].innerHTML,
-										typeProductAndBusiness: rowSelected.cells[3].innerHTML,
-										uri: rowSelected.cells[5].innerHTML
-									}
-								]
-							}).success(function (data, status) {
-								// alert("Compra realizada com sucesso. Retirar na loja")
-							})
-						} else {
-							//alert("digite o cpf para realizar a compra")
-							cpfEmpty();
-						}
+						shoppingCart.addItemToCart(rowSelected.cells[0].innerHTML, rowSelected.cells[2].innerHTML, 1, 
+							rowSelected.cells[4].innerHTML, rowSelected.cells[5].innerHTML);
+						displayCart();
 					}
 				}
 			})
-
 			.error(function (error) {
 				console.log(error);
 			});
@@ -376,28 +391,10 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 						rowSelected.className += " selected";
 
 						$scope.lat_lng_query = encodeURIComponent($scope.lat_lng_query)
-
-						if (cpf.value != "") {
-							shoppingCart.addItemToCart(rowSelected.cells[0].innerHTML, rowSelected.cells[2].innerHTML, 1);
-							displayCart();
-
-							$http({
-								method: "POST",
-								url: "https://ws-music-gallery-system.herokuapp.com/purchase/make-purchase?age=18&cpf=" + cpf.value, //+ encodeURIComponent($scope.cpfUsuario.replace(" ", "")),
-								headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-								data: [
-									{
-										name: rowSelected.cells[0].innerHTML,
-										typeProductAndBusiness: rowSelected.cells[3].innerHTML,
-										uri: rowSelected.cells[5].innerHTML
-									}
-								]
-							}).success(function (data, status) {
-								// alert("Compra realizada com sucesso. Retirar na loja")
-							})
-						} else {
-							cpfEmpty();
-						}
+						
+						shoppingCart.addItemToCart(rowSelected.cells[0].innerHTML, rowSelected.cells[2].innerHTML, 1, 
+							rowSelected.cells[4].innerHTML, rowSelected.cells[5].innerHTML);
+						displayCart();
 					}
 				}
 			})
