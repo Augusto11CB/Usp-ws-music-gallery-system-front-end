@@ -1,9 +1,12 @@
 angular.module('KRRclass', ['chart.js']).controller('MainCtrl', ['$scope', '$http', mainCtrl]);
 
 function mainCtrl($scope, $http, ChartJsProvider) {
+	$('#cpfModal').modal({backdrop: 'static', keyboard: false})  
 
+	
 	$scope.myendpoint = "http://localhost:7200/repositories/hiper_mega_final_winez?query=";
 	$scope.nomeloja = "";
+	$scope.cpf = "";
 
 	var shoppingCart = (function () {
 		// =============================
@@ -155,8 +158,8 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 
 
 	$(".order").click(function () {
-		var cpf = document.getElementById("cpfUsuario");
-		if (cpf.value != "") {
+		//$scope.cpf = document.getElementById("cpfUsuario");
+		if ($scope.cpf != "") {
 			var cart = shoppingCart.listCart();
 			var post_cart = []
 			console.log(cart);
@@ -171,7 +174,7 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 
 			$http({
 				method: "POST",
-				url: "https://ws-music-gallery-system.herokuapp.com/purchase/make-purchase?age=18&cpf=" + cpf.value, //+ encodeURIComponent($scope.cpfUsuario.replace(" ", "")),
+				url: "https://ws-music-gallery-system.herokuapp.com/purchase/make-purchase?age=18&cpf=" + $scope.cpf, //+ encodeURIComponent($scope.cpfUsuario.replace(" ", "")),
 				headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
 				data: post_cart		
 			}).success(function (data, status) {
@@ -179,7 +182,7 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 			}) 
 		}
 		else {
-			cpfEmpty();
+			$scope.cpfEmpty();
 		}
 	});	
 
@@ -252,7 +255,7 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 		})
 			.success(function (data, status) {
 				var lojatable = document.getElementById("produtos");
-				var cpf = document.getElementById("cpfUsuario");
+				//$scope.cpf = document.getElementById("cpfUsuario");
 
 				$("#produtos").find("tr:not(:first)").remove();
 				console.log(data);
@@ -338,7 +341,7 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 		})
 			.success(function (data, status) {
 				var lojatable = document.getElementById("produtos");
-				var cpf = document.getElementById("cpfUsuario");
+				//$scope.cpf = document.getElementById("cpfUsuario");
 
 				$("#produtos").find("tr:not(:first)").remove();
 				console.log(data);
@@ -404,6 +407,16 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 
 	}
 
+	$scope.botaoCpf = function(){
+		$scope.cpf = document.getElementById("cpfUsuario").value;
+		if ($scope.cpf == "" || $scope.cpf.length < 11 || $scope.cpf.length > 11) {
+			cpfEmpty();
+			$scope.cpf = "";
+		} else {
+			$('#cpfModal').modal('hide');
+		}
+	}
+
 	$scope.buttonRecomendation = function () {
 
 		var loja_drop_down_list = document.getElementById("location");
@@ -414,16 +427,16 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 		var mapimage = document.getElementById("mapimage");
 		mapimage.src = "image/map.png";
 
-		var cpf = document.getElementById("cpfUsuario");
+		//$scope.cpf = document.getElementById("cpfUsuario");
 
-		if (cpf.value == "" || cpf.value.length < 11 || cpf.value.length > 11) {
+		if ($scope.cpf == "" || $scope.cpf.length < 11 || $scope.cpf.length > 11) {
 			cpfEmpty();
 		} else {
 
 			$http({
 				method: "GET",
 				headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-				url: "https://ws-music-gallery-system.herokuapp.com/recommendation/get-recommended-products?userCPF=" + cpf.value,
+				url: "https://ws-music-gallery-system.herokuapp.com/recommendation/get-recommended-products?userCPF=" + $scope.cpf,
 
 			})
 				.success(function (data, status) {
@@ -480,13 +493,13 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 
 							$scope.lat_lng_query = encodeURIComponent($scope.lat_lng_query)
 
-							if (cpf.value != "") {
+							if ($scope.cpf != "") {
 								shoppingCart.addItemToCart(rowSelected.cells[0].innerHTML, rowSelected.cells[2].innerHTML, 1);
 								displayCart();
 
 								$http({
 									method: "POST",
-									url: "https://ws-music-gallery-system.herokuapp.com/purchase/make-purchase?age=18&cpf=" + cpf.value, //+ encodeURIComponent($scope.cpfUsuario.replace(" ", "")),
+									url: "https://ws-music-gallery-system.herokuapp.com/purchase/make-purchase?age=18&cpf=" + $scope.cpf, //+ encodeURIComponent($scope.cpfUsuario.replace(" ", "")),
 									headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
 									data: [
 										{

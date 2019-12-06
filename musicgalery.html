@@ -58,6 +58,7 @@
 			<div class="navbar-header">
 				<a class="navbar-brand" href="#"><img src="image/nota.png" height="50" alt=""> Music Galery</a>
 			</div>
+			<label>Usuário: {{cpf}}</label> 
 			<ul class="nav navbar-nav navbar-right">
 				<button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal"
 					data-target="#cart">Cart(<span class="total-count"></span>)</button>
@@ -97,8 +98,8 @@
 				<div class="col">
 					<!--h1>Input the wine preferences</h1> -->
 					<div id="main">
-					<button class="addMore" title="Selecione a loja que deseja visitar.">i</button>
-					<h2>Lojas</h2>
+						<button class="addMore" title="Selecione a loja que deseja visitar.">i</button>
+						<h2>Lojas</h2>
 					</div>
 
 					<select id="location">
@@ -114,8 +115,7 @@
 					<br></br>
 
 					<div id="main">
-							<button class="addMore"
-							title="Selectione o tipo de produto que deseja comprar.">i</button>
+						<button class="addMore" title="Selectione o tipo de produto que deseja comprar.">i</button>
 						<h2>Tipo de Produto</h2>
 					</div>
 					<select id="pricecategory">1
@@ -128,7 +128,6 @@
 					</select>
 					<div align="center">
 						<br>
-						<input id="cpfUsuario" type="text" name="FirstName" placeholder="Digite o CPF">
 						<br>
 						<br>
 						<button class="btn btn-outline-secondary" ng-click="botaoloja()" type="button">Pesquisar
@@ -170,6 +169,26 @@
 		</div>
 	</div>
 
+
+	<!-- MODAL PARA INCLUSAO DO CPF -->
+	<div id="cpfModal" class="modal" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-dialog-centered text-center" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Entre com seu CPF</h5>
+
+				</div>
+				<div class="modal-body">
+					<p>Modal body text goes here.</p>
+					<input id="cpfUsuario" type="text" name="FirstName" placeholder="Digite o CPF">
+
+				</div>
+				<div class="modal-footer">
+					<button id="botaoCpf"  type="button"  class="btn btn-primary" ng-click="botaoCpf()" type="button">OK</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<!--
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCGLzhK-m3Zq1EWCBkEZynP0cQ9oQb5uo&callback=initMap">
