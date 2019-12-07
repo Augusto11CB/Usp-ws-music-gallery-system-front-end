@@ -17,6 +17,8 @@
 		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<link href="./css/bootstrap.min.css" rel="stylesheet">
 	<link href="./css/css-custom.css" rel="stylesheet">
+	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+		integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
 	<style>
 		#map {
@@ -58,7 +60,7 @@
 			<div class="navbar-header">
 				<a class="navbar-brand" href="#"><img src="image/nota.png" height="50" alt=""> Music Galery</a>
 			</div>
-			<label>Usuário: {{cpf}}</label> 
+			<h3>Usuário: {{cpf}}</h3>
 			<ul class="nav navbar-nav navbar-right">
 				<button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal"
 					data-target="#cart">Cart(<span class="total-count"></span>)</button>
@@ -130,18 +132,23 @@
 						<br>
 						<br>
 						<br>
-						<button class="btn btn-outline-secondary" ng-click="botaoloja()" type="button">Pesquisar
-							loja</button>
-						<br>
-						<br>
-						<button class="btn btn-outline-secondary" ng-click="botaoproduto()" type="button">Pesquisar tipo
-							produto</button>
-						<br>
+						<div class="btn-group" role="group" aria-label="Basic example">
 
-						<br>
-						<button class="btn btn-outline-secondary" ng-click="buttonRecomendation()" type="button"> Sem
-							criatividade hoje? Obtenha algumas recomendações !! </button>
+							<button class="btn btn-outline-secondary mr-2" ng-click="botaoloja()" type="button">Pesquisar
+								loja</button>
+							<br>
+							<br>
+							<button class="btn btn-outline-secondary mr-2" ng-click="botaoproduto()" type="button">Pesquisar
+								tipo
+								produto</button>
+							<br>
 
+							<br>
+							<button class="btn btn-outline-secondary mr-2" ng-click="buttonRecomendation()" type="button">
+								Sem
+								criatividade hoje? Obtenha algumas recomendações !! </button>
+
+						</div>
 					</div>
 					<img id="mapimage" src="image/map.png" alt="image" class="center">
 
@@ -167,6 +174,8 @@
 				</table>
 			</div>
 		</div>
+		<a href="javascript:" style="margin-left:1220px; color:black; font-size: 49px;" class="fa fa-angle-up fa-10x"
+			ng-click="scrollTop()"> </a>
 	</div>
 
 
@@ -184,7 +193,8 @@
 
 				</div>
 				<div class="modal-footer">
-					<button id="botaoCpf"  type="button"  class="btn btn-primary" ng-click="botaoCpf()" type="button">OK</button>
+					<button id="botaoCpf" type="button" class="btn btn-primary" ng-click="botaoCpf()"
+						type="button">OK</button>
 				</div>
 			</div>
 		</div>

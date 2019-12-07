@@ -186,6 +186,12 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 		}
 	});	
 
+
+	$scope.scrollTop = function () {
+		window.scrollTo(0, 0);
+
+	}
+
 	function displayCart() {
 		var cartArray = shoppingCart.listCart();
 		var output = "";
