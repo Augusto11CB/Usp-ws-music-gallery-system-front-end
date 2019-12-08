@@ -1,9 +1,8 @@
 angular.module('KRRclass', ['chart.js']).controller('MainCtrl', ['$scope', '$http', mainCtrl]);
 
 function mainCtrl($scope, $http, ChartJsProvider) {
-	$('#cpfModal').modal({backdrop: 'static', keyboard: false})  
+	$('#cpfModal').modal({ backdrop: 'static', keyboard: false })
 
-	
 	$scope.myendpoint = "http://localhost:7200/repositories/hiper_mega_final_winez?query=";
 	$scope.nomeloja = "";
 	$scope.cpf = "";
@@ -15,11 +14,12 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 		cart = [];
 
 		// Constructor
-		function Item(name, price, count, type, uri) {
+		function Item(name, price, count, type, uri, available) {
 			this.name = name;
 			this.price = price;
 			this.count = count;
 			this.type = type;
+			this.available = available
 			this.uri = uri;
 		}
 
@@ -27,7 +27,6 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 		function saveCart() {
 			sessionStorage.setItem('shoppingCart', JSON.stringify(cart));
 		}
-
 		// Load cart
 		function loadCart() {
 			cart = JSON.parse(sessionStorage.getItem('shoppingCart'));
@@ -41,15 +40,19 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 		// =============================
 		var obj = {};
 		// Add to cart
-		obj.addItemToCart = function (name, price, count, type, uri) {
+		obj.addItemToCart = function (name, price, count, type, uri, available) {
 			for (var item in cart) {
 				if (cart[item].name === name) {
-					cart[item].count++;
+					if(cart[item].count >= cart[item].available){
+						cart[item].count = cart[item].available;
+					} else {
+						cart[item].count++;
+					}
 					saveCart();
 					return;
 				}
 			}
-			var item = new Item(name, price, count, type, uri);
+			var item = new Item(name, price, count, type, uri, available);
 			cart.push(item);
 			saveCart();
 		}
@@ -57,7 +60,12 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 		obj.setCountForItem = function (name, count) {
 			for (var i in cart) {
 				if (cart[i].name === name) {
-					cart[i].count = count;
+					if(cart[i].count >= cart[i].available){
+						cart[i].count = cart[i].available;
+					} else {
+						cart[i].count = count;	
+					}
+					saveCart();
 					break;
 				}
 			}
@@ -146,7 +154,8 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 		var price = Number($(this).data('price'));
 		var type = $(this).data('type');
 		var uri = $(this).data('uri');
-		shoppingCart.addItemToCart(name, price, 1, type, uri);
+		var available = Number($(this).data('available'));
+		shoppingCart.addItemToCart(name, price, 1, type, uri, available);
 		displayCart();
 	});
 
@@ -162,13 +171,14 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 		if ($scope.cpf != "") {
 			var cart = shoppingCart.listCart();
 			var post_cart = []
-			console.log(cart);
+			console.log(post_cart);
 
-			for (var i = 0; i < cart.length; i++){
+			for (var i = 0; i < cart.length; i++) {
 				post_cart[i] = {
-					name: cart[i]["name"].innerHTML,
-					typeProductAndBusiness: cart[i]["type"].innerHTML,
-					uri: cart[i]["uri"].innerHTML
+					name: cart[i]["name"],
+					typeProductAndBusiness: cart[i]["type"],
+					uri: cart[i]["uri"],
+					availableQuantity: cart[i]["available"] - cart[i]["count"]
 				}
 			}
 
@@ -176,15 +186,17 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 				method: "POST",
 				url: "https://ws-music-gallery-system.herokuapp.com/purchase/make-purchase?age=18&cpf=" + $scope.cpf, //+ encodeURIComponent($scope.cpfUsuario.replace(" ", "")),
 				headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-				data: post_cart		
+				data: post_cart
 			}).success(function (data, status) {
-				// alert("Compra realizada com sucesso. Retirar na loja")
-			}) 
+				productPurchased();
+				shoppingCart.clearCart();
+				displayCart();
+			})
 		}
 		else {
 			$scope.cpfEmpty();
 		}
-	});	
+	});
 
 
 	$scope.scrollTop = function () {
@@ -213,19 +225,19 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 	}
 
 	$('.show-cart').on("click", ".delete-item", function (event) {
-		var name = $(this).data('name')
+		var name = $(this).data('name');
 		shoppingCart.removeItemFromCartAll(name);
 		displayCart();
 	})
 
 	$('.show-cart').on("click", ".plus-item", function (event) {
-		var name = $(this).data('name')
+		var name = $(this).data('name');
 		shoppingCart.addItemToCart(name);
 		displayCart();
 	})
 
 	$('.show-cart').on("click", ".minus-item", function (event) {
-		var name = $(this).data('name')
+		var name = $(this).data('name');
 		shoppingCart.removeItemFromCart(name);
 		displayCart();
 	})
@@ -251,7 +263,6 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 
 		var mapimage = document.getElementById("mapimage");
 		mapimage.src = "image/" + $scope.nomeloja + ".png";
-
 
 		$http({
 			method: "GET",
@@ -284,13 +295,17 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 					cell.innerHTML = $scope.resultz[j]["price"];
 
 					var cell = newRow.insertCell(3);
-					cell.innerHTML = $scope.resultz[j]["typeProductAndBusiness"];
+					cell.innerHTML = $scope.resultz[j]["availableQuantity"]
 
 					var cell = newRow.insertCell(4);
-					cell.innerHTML = $scope.resultz[j]["soldByStore"]["name"];
+					cell.innerHTML = $scope.resultz[j]["typeProductAndBusiness"];
 
 					var cell = newRow.insertCell(5);
+					cell.innerHTML = $scope.resultz[j]["soldByStore"]["name"];
+
+					var cell = newRow.insertCell(6);
 					cell.innerHTML = $scope.resultz[j]["uri"];
+					console.log($scope.resultz[j]["uri"]);
 				}
 
 				var cells = lojatable.getElementsByTagName('td');
@@ -314,8 +329,8 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 
 						$scope.lat_lng_query = encodeURIComponent($scope.lat_lng_query)
 
-						shoppingCart.addItemToCart(rowSelected.cells[0].innerHTML, rowSelected.cells[2].innerHTML, 1, 
-							rowSelected.cells[4].innerHTML, rowSelected.cells[5].innerHTML);
+						shoppingCart.addItemToCart(rowSelected.cells[0].innerHTML, rowSelected.cells[2].innerHTML, 1,
+							rowSelected.cells[4].innerHTML, rowSelected.cells[6].innerHTML, Number(rowSelected.cells[3].innerHTML));
 						displayCart();
 					}
 				}
@@ -323,9 +338,7 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 			.error(function (error) {
 				console.log(error);
 			});
-
 	}
-
 
 	$scope.botaoproduto = function () {
 
@@ -353,7 +366,6 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 				console.log(data);
 				$scope.resultz = eval(data);
 
-
 				if (!lojatable) return;
 
 				// var test = [1,2,3,4,5,6];
@@ -370,15 +382,16 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 					cell.innerHTML = $scope.resultz[j]["price"];
 
 					var cell = newRow.insertCell(3);
-					cell.innerHTML = $scope.resultz[j]["typeProductAndBusiness"];
+					cell.innerHTML = $scope.resultz[j]["availableQuantity"]
 
 					var cell = newRow.insertCell(4);
-					cell.innerHTML = $scope.resultz[j]["soldByStore"]["name"];
+					cell.innerHTML = $scope.resultz[j]["typeProductAndBusiness"];
 
 					var cell = newRow.insertCell(5);
-					cell.innerHTML = $scope.resultz[j]["uri"];
-					console.log($scope.resultz[j]["uri"]);
+					cell.innerHTML = $scope.resultz[j]["soldByStore"]["name"];
 
+					var cell = newRow.insertCell(6);
+					cell.innerHTML = $scope.resultz[j]["uri"];
 				}
 				var cells = lojatable.getElementsByTagName('td');
 
@@ -400,9 +413,9 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 						rowSelected.className += " selected";
 
 						$scope.lat_lng_query = encodeURIComponent($scope.lat_lng_query)
-						
-						shoppingCart.addItemToCart(rowSelected.cells[0].innerHTML, rowSelected.cells[2].innerHTML, 1, 
-							rowSelected.cells[4].innerHTML, rowSelected.cells[5].innerHTML);
+						// name, price, count, type, uri, available
+						shoppingCart.addItemToCart(rowSelected.cells[0].innerHTML, rowSelected.cells[2].innerHTML, 1,
+							rowSelected.cells[4].innerHTML, rowSelected.cells[6].innerHTML, Number(rowSelected.cells[3].innerHTML));
 						displayCart();
 					}
 				}
@@ -413,7 +426,7 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 
 	}
 
-	$scope.botaoCpf = function(){
+	$scope.botaoCpf = function () {
 		$scope.cpf = document.getElementById("cpfUsuario").value;
 		if ($scope.cpf == "" || $scope.cpf.length < 11 || $scope.cpf.length > 11) {
 			cpfEmpty();
@@ -435,150 +448,127 @@ function mainCtrl($scope, $http, ChartJsProvider) {
 
 		//$scope.cpf = document.getElementById("cpfUsuario");
 
-		if ($scope.cpf == "" || $scope.cpf.length < 11 || $scope.cpf.length > 11) {
-			cpfEmpty();
-		} else {
+		$http({
+			method: "GET",
+			headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+			url: "https://ws-music-gallery-system.herokuapp.com/recommendation/get-recommended-products?userCPF=" + $scope.cpf,
 
-			$http({
-				method: "GET",
-				headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-				url: "https://ws-music-gallery-system.herokuapp.com/recommendation/get-recommended-products?userCPF=" + $scope.cpf,
+		})
+			.success(function (data, status) {
+				var lojatable = document.getElementById("produtos");
 
-			})
-				.success(function (data, status) {
-					var lojatable = document.getElementById("produtos");
-
-					$("#produtos").find("tr:not(:first)").remove();
-					console.log(data);
-					$scope.resultz = eval(data);
+				$("#produtos").find("tr:not(:first)").remove();
+				console.log(data);
+				$scope.resultz = eval(data);
 
 
-					if (!lojatable) return;
+				if (!lojatable) return;
 
-					// var test = [1,2,3,4,5,6];
-					for (j = 0; j < $scope.resultz.length; j++) {
-						var newRow = lojatable.insertRow(lojatable.rows.length);
+				// var test = [1,2,3,4,5,6];
+				for (j = 0; j < $scope.resultz.length; j++) {
+					var newRow = lojatable.insertRow(lojatable.rows.length);
 
-						var cell = newRow.insertCell(0);
-						cell.innerHTML = $scope.resultz[j]["name"];
+					var cell = newRow.insertCell(0);
+					cell.innerHTML = $scope.resultz[j]["name"];
 
-						var cell = newRow.insertCell(1);
-						cell.innerHTML = $scope.resultz[j]["brand"];
+					var cell = newRow.insertCell(1);
+					cell.innerHTML = $scope.resultz[j]["brand"];
 
-						var cell = newRow.insertCell(2);
-						cell.innerHTML = $scope.resultz[j]["price"];
+					var cell = newRow.insertCell(2);
+					cell.innerHTML = $scope.resultz[j]["price"];
 
-						var cell = newRow.insertCell(3);
-						cell.innerHTML = $scope.resultz[j]["typeProductAndBusiness"];
+					var cell = newRow.insertCell(3);
+					cell.innerHTML = $scope.resultz[j]["availableQuantity"]
 
-						var cell = newRow.insertCell(4);
-						cell.innerHTML = $scope.resultz[j]["soldByStore"]["name"];
+					var cell = newRow.insertCell(4);
+					cell.innerHTML = $scope.resultz[j]["typeProductAndBusiness"];
 
-						var cell = newRow.insertCell(5);
-						cell.innerHTML = $scope.resultz[j]["uri"];
-					}
+					var cell = newRow.insertCell(5);
+					cell.innerHTML = $scope.resultz[j]["soldByStore"]["name"];
 
-					var cells = lojatable.getElementsByTagName('td');
+					var cell = newRow.insertCell(6);
+					cell.innerHTML = $scope.resultz[j]["uri"];
+				}
 
-					for (var i = 0; i < cells.length; i++) {
-						// Take each cell
-						var cell = cells[i];
-						// do something on onclick event for cell
-						cell.onclick = function () {
-							// Get the row id where the cell exists
-							var rowId = this.parentNode.rowIndex;
+				var cells = lojatable.getElementsByTagName('td');
 
-							var rowsNotSelected = lojatable.getElementsByTagName('tr');
-							for (var row = 0; row < rowsNotSelected.length; row++) {
-								rowsNotSelected[row].style.backgroundColor = "";
-								rowsNotSelected[row].classList.remove('selected');
-							}
-							var rowSelected = lojatable.getElementsByTagName('tr')[rowId];
-							rowSelected.style.backgroundColor = "yellow";
-							rowSelected.className += " selected";
+				for (var i = 0; i < cells.length; i++) {
+					// Take each cell
+					var cell = cells[i];
+					// do something on onclick event for cell
+					cell.onclick = function () {
+						// Get the row id where the cell exists
+						var rowId = this.parentNode.rowIndex;
 
-							$scope.lat_lng_query = encodeURIComponent($scope.lat_lng_query)
-
-							if ($scope.cpf != "") {
-								shoppingCart.addItemToCart(rowSelected.cells[0].innerHTML, rowSelected.cells[2].innerHTML, 1);
-								displayCart();
-
-								$http({
-									method: "POST",
-									url: "https://ws-music-gallery-system.herokuapp.com/purchase/make-purchase?age=18&cpf=" + $scope.cpf, //+ encodeURIComponent($scope.cpfUsuario.replace(" ", "")),
-									headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-									data: [
-										{
-											name: rowSelected.cells[0].innerHTML,
-											typeProductAndBusiness: rowSelected.cells[3].innerHTML,
-											uri: rowSelected.cells[5].innerHTML
-										}
-									]
-								}).success(function (data, status) {
-									// alert("Compra realizada com sucesso. Retirar na loja")
-									
-								})
-							} else {
-								//alert("digite o cpf para realizar a compra")
-								cpfEmpty();
-							}
+						var rowsNotSelected = lojatable.getElementsByTagName('tr');
+						for (var row = 0; row < rowsNotSelected.length; row++) {
+							rowsNotSelected[row].style.backgroundColor = "";
+							rowsNotSelected[row].classList.remove('selected');
 						}
+						var rowSelected = lojatable.getElementsByTagName('tr')[rowId];
+						rowSelected.style.backgroundColor = "yellow";
+						rowSelected.className += " selected";
+
+						$scope.lat_lng_query = encodeURIComponent($scope.lat_lng_query)
+						shoppingCart.addItemToCart(rowSelected.cells[0].innerHTML, rowSelected.cells[2].innerHTML, 1,
+							rowSelected.cells[4].innerHTML, rowSelected.cells[6].innerHTML, Number(rowSelected.cells[3].innerHTML));
+						displayCart();
 					}
-				})
-
-				.error(function (error) {
-					console.log(error);
-				});
-		}
-
+				}
+			})
+			.error(function (error) {
+				console.log(error);
+			});
 	}
 
-	function cpfEmpty() {
-		swal({
-			title: "Para realizar um pedido de compra um CPF valido deve ser informado.",
-			text: "Seu pedido compra não foi realizada usando o modo One Click",
-			type: "warning",
-			//showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "OK",
-			//cancelButtonText: "I am not sure!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		}
-			// function (isConfirm) {
-
-			// 	swal("Hurray", "Account is not removed!", "error");
-			// 	if (isConfirm) {
-			// 		swal("Account Removed!", "Your account is removed permanently!", "success");
-			// 	}
-			// 	else {
-			// 		swal("Hurray", "Account is not removed!", "error");
-			// 	}
-			//}
-		);
-	}
-
-	function productPurchased() {
-		swal({
-			title: "Pedido de compra realizado com sucesso!!",
-			text: "Vá até a loja para finalizar a compra e retirar seu novo produto!! :D",
-			type: "success",
-			//showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "OK",
-			//cancelButtonText: "I am not sure!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		}//,
-			//  function (isConfirm) {
-
-			//  	if (isConfirm) {
-			//  		swal("Pedido de Compra realizado com sucesso!", "success");
-			//  	}
-			//  	else {
-			//  		swal("Hurray", "Account is not removed!", "error");
-			//  	}
-			//  }
-		);
-	}
 }
+
+function cpfEmpty() {
+	swal({
+		title: "Para realizar um pedido de compra um CPF valido deve ser informado.",
+		text: "Seu pedido compra não foi realizada usando o modo One Click",
+		type: "warning",
+		//showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "OK",
+		//cancelButtonText: "I am not sure!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	}
+		// function (isConfirm) {
+
+		// 	swal("Hurray", "Account is not removed!", "error");
+		// 	if (isConfirm) {
+		// 		swal("Account Removed!", "Your account is removed permanently!", "success");
+		// 	}
+		// 	else {
+		// 		swal("Hurray", "Account is not removed!", "error");
+		// 	}
+		//}
+	);
+}
+
+function productPurchased() {
+	swal({
+		title: "Pedido de compra realizado com sucesso!!",
+		text: "Vá até a loja para finalizar a compra e retirar seu novo produto!! :D",
+		type: "success",
+		//showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "OK",
+		//cancelButtonText: "I am not sure!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	}//,
+		//  function (isConfirm) {
+
+		//  	if (isConfirm) {
+		//  		swal("Pedido de Compra realizado com sucesso!", "success");
+		//  	}
+		//  	else {
+		//  		swal("Hurray", "Account is not removed!", "error");
+		//  	}
+		//  }
+	);
+}
+
